@@ -1,0 +1,88 @@
+package player;
+
+import fishingrods.*;
+import java.util.List;
+import java.util.ArrayList;
+import console.*;
+
+
+public class Player {
+    private int gold = 100;
+    private int day = 7;
+    private int fishBait = 10;
+    private List<FishingRod> rods = new ArrayList<FishingRod>();
+
+    public int getGold() {
+        return gold;
+    }
+
+    public void setGold(int gold) {
+        this.gold = gold;
+    }
+
+    public int getFishBait() {
+        return fishBait;
+    }
+
+    public void setFishBait(int fishBait) {
+        this.fishBait = fishBait;
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+    public void setDay(int day) {
+        this.day = day;
+    }
+
+    public FishingRod getRod(int rodNum) {
+        return rods.get(rodNum);
+    }
+
+    public void setRods(List<FishingRod> rods) {
+        this.rods = rods;
+    }
+
+    public void addRod(FishingRod rod) {
+        rods.add(rod);
+    }
+
+    public void dispGold(){
+        System.out.println(Console.YELLOW + "Gold: " + gold + "$" + Console.RESET);
+    }
+
+    public void dispFishBait(){
+        System.out.println(Console.PURPLE + "Fish Bait: " + fishBait + Console.RESET);
+    }
+
+    public void dispDayNum(){
+        int dayCurr = day % 7;
+        if(dayCurr == 0) dayCurr = 7;
+
+        if(dayCurr < 6){
+            System.out.println("Day: " + day + " (" + dayCurr + "/7)");
+        } else {
+            System.out.println("Day: " + day + " (" + Console.RED + dayCurr + "/7" + Console.RESET + ")");
+        }
+        
+    }
+
+    public void nextDay(){
+        day++;
+    }
+
+    public void pay(int ammount){
+        gold -= ammount;
+    }
+
+    public boolean isEndOfWeek(){
+        return day % 7 == 0;
+    }
+
+    public void dispStats(){
+        dispGold();
+        dispFishBait();
+        dispDayNum();
+    }
+}
