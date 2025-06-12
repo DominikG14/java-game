@@ -1,6 +1,7 @@
 import fishingrods.*;
 import shop.*;
 
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 import player.*;
@@ -54,7 +55,7 @@ public class Main {
             System.out.println(Console.BOLD + Console.UNDERLINE + "Buy your first fishing rod!" + Console.RESET);
             System.out.println();
 
-            shop.dispShop();
+            shop.dispFirstRodShop();
 
             if(error) {
                 System.out.println(Console.RED + err_msg + Console.RESET);
@@ -146,10 +147,6 @@ public class Main {
 
                 int caughtProbability = 1 + rand.nextInt(100);
 
-                if(caughtProbability <= fishProbability){
-                    player.addFish(fish);
-                }
-
                 rodDurability -= fish.getNumber();
                 rod.setDurability(rodDurability);
                 if(rodDurability < 0){
@@ -165,6 +162,16 @@ public class Main {
                     fish.setNumber( fish.getNumber() - excess );
                     player.setFishBait(0);
                 }
+
+                if(caughtProbability <= fishProbability){
+                    if( player.getFishCaught().contains(fish) ){
+                        int fishIndex = player.getFishCaught().indexOf(fish);
+                        Fish caughtFish = player.getFishCaught().get(fishIndex);
+                        caughtFish.setNumber( caughtFish.getNumber() + fish.getNumber() );
+                    } else {
+                        player.addFish(fish);
+                    }
+                }
             }
         }
 
@@ -172,7 +179,126 @@ public class Main {
     }
 
     public static void goShopping(){
-        if(player.getRods().size() == 3) return;
-        buyFirstRod(); // TEST
+        Scanner userInput = new Scanner(System.in);
+        int optionNum;
+        int shopActions = 0;
+
+        boolean error = false;
+        String err_msg = "";
+
+        Shop shop = new Shop();
+        shop.generateShopOffer();
+
+        while(shopActions < Shop.MAX_SHOP_ACTIONS){
+            while( true ){
+                Console.clearScreen();
+
+                Console.textSeparator("STATS");
+                player.dispStats();
+
+                if( !player.getFishCaught().isEmpty() ){
+                    Console.textSeparator("FISH");
+                    player.dispFishCaught();
+                }
+
+                Console.textSeparator("FISHING RODS");
+                for(FishingRod rod : player.getRods() ){
+                    rod.dispShortenStats();
+                }
+
+                Console.textSeparator(Console.YELLOW + "SHOP" + Console.RESET);
+                shop.dispShopOffer();
+
+                Console.textSeparator(Console.BRIGHT_RED + "CHOOSE YOUR ACTION" + Console.RESET, true, false);
+                if(error) {
+                    System.out.println(Console.RED + err_msg + Console.RESET);
+                    error = false;
+                }
+                System.out.println(
+                    "Choose" + Console.YELLOW + " option " + Console.RESET + 
+                    "(" + Console.YELLOW +  "1-" + Shop.MAX_SHOP_ITEMS + Console.RESET + ")."
+                );
+                System.out.print(
+                    "Or type '" + Console.RED + "0" + Console.RESET + 
+                    "' to" + Console.RED + " skip " + Console.RESET + 
+                    "visiting shop\n> "
+                );
+
+                if (userInput.hasNextInt()) {
+                    optionNum = userInput.nextInt();
+                    if(optionNum == 0) break;
+                    if (optionNum >= 1 && optionNum <= Shop.MAX_SHOP_ITEMS) break;
+                    error = true;
+                    err_msg = "Number out of range! Try again";
+                } else {
+                    error = true;
+                    err_msg = "Not a number! Try again";
+                    userInput.next();
+                }
+            }
+
+            if(optionNum == 0) break;
+            optionNum--; // Indexes are one less than choosen option
+
+            ShopOption option = shop.getChoosenOption(optionNum);
+
+            switch(option){
+                case BUY_ROD:
+                    FishingRod rod = shop.getRodFromShop( optionNum );
+                    if( player.getRods().size() == Player.MAX_ROD_NUM ){
+                        error = true;
+                        err_msg = "Not enough space to buy this Fishing Rod!";
+                        break;
+                    }
+
+                    if( player.getGold() >= rod.getGold() ){
+                        player.pay( rod.getGold() );
+                        player.addRod(rod);
+                        shop.sellOption( optionNum );
+                        shopActions++;
+                    } else {
+                        error = true;
+                        err_msg = "Not enough gold to buy this Fishing Rod!";
+                    }
+                    break;
+
+                case BUY_FISH_BAIT:
+                    if( player.getGold() >= shop.getFishBaitPrice() ){
+                            player.pay( shop.getFishBaitPrice() );
+                            int newFishBaitAmmount = player.getFishBait() + shop.getFishBaitNum();
+                            player.setFishBait( newFishBaitAmmount );
+                            shop.sellOption( optionNum );
+                            shopActions++;
+                    } else {
+                        error = true;
+                        err_msg = "Not enough gold to buy Fishing Bait!";
+                    }
+                    break;
+                    
+                case SELL_FISH:
+                    Fish sellFish = shop.getFishToSell( optionNum );
+                    
+                    if( player.getFishCaught().contains(sellFish) ){
+                        int fishIndex = player.getFishCaught().indexOf(sellFish);
+                        Fish caughtFish = player.getFishCaught().get(fishIndex);
+
+                        int newGold = player.getGold();
+                        newGold += caughtFish.getNumber() * sellFish.getGold();
+                        
+                        player.setGold(newGold);
+                        player.getFishCaught().remove(fishIndex);
+
+                        shop.sellOption( optionNum );
+                        shopActions++;
+                    } else {
+                        error = true;
+                        err_msg = "You don't have this fish!";
+                    }
+                    break;
+            }
+        }
+
+        List<Fish> fishCaught = player.getFishCaught();
+        fishCaught.clear();
     }
 }

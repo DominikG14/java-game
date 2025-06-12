@@ -8,7 +8,7 @@ import fish.*;
 
 
 public class Player {
-    private static final int MAX_ROD_NUM = 3;
+    public static final int MAX_ROD_NUM = 3;
 
     private int rent = 50;
     private int gold = 100;
@@ -61,6 +61,10 @@ public class Player {
         System.out.println(Console.YELLOW + "Gold: " + gold + "$" + Console.RESET);
     }
 
+    public void dispRent(){
+        System.out.println(Console.RED + "Next Rent: " + Console.YELLOW + rent + "$" + Console.RESET);
+    }
+
     public void dispFishBait(){
         System.out.println(Console.PURPLE + "Fish Bait: " + fishBait + Console.RESET);
     }
@@ -95,6 +99,7 @@ public class Player {
 
     public void dispStats(){
         dispGold();
+        dispRent();
         dispFishBait();
         dispDayNum();
     }
@@ -113,7 +118,18 @@ public class Player {
 
     public boolean payRent(){
         gold -= rent;
+        rent += rent / 2;
         if(gold < 0) return false;
         return true;
+    }
+
+    public void dispFishCaught(){
+        for(Fish fish : fishCaught){
+            fish.dispCaughtInfo();
+        }
+    }
+
+    public List<Fish> getFishCaught(){
+        return fishCaught;
     }
 }
