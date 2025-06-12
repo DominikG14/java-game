@@ -56,25 +56,25 @@ public class Pool {
     public Fish getRandomFish(){
         Fish fish;
 
-        int pick = random.nextInt(6);
+        FishType pick = FishType.getRandomFishType();
 
         switch (pick) {
-            case 0:
+            case CARP:
                 fish = new Carp();
                 break;
-            case 1:
+            case COD:
                 fish = new Cod();
                 break;
-            case 2:
+            case MACKEREL:
                 fish = new Mackerel();
                 break;
-            case 3:
+            case PIKE:
                 fish = new Pike();
                 break;
-            case 4:
+            case SALMON:
                 fish = new Salmon();
                 break;
-            case 5:
+            case TUNA:
                 fish = new Tuna();
                 break;
             default:
