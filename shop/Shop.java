@@ -14,17 +14,48 @@ public class Shop {
         FishingRod rod;
 
         for(int i = 0; i < numOfRods; i++){
-            int pick = random.nextInt(2);
+            FishingRodType pick = FishingRodType.getRandomFishingRodType();
 
-            switch (pick) {
-                case 0:
+            switch(pick){
+                case LIGHTNING_ROD:
                     rod = new LightningRod();
                     break;
-                case 1:
+                case FLASH_CAST:
                     rod = new FlashCast();
+                    break;
+                case EAGLE_EYE:
+                    rod = new EagleEye();
+                    break;
+                case SURE_HOOK:
+                    rod = new SureHook();
+                    break;
+                case FAR_REACH:
+                    rod = new FarReach();
+                    break;
+                case HORIZON:
+                    rod = new Horizon();
+                    break;
+                case RAPID_AIM:
+                    rod = new RapidAim();
+                    break;
+                case TURBO_SHOT:
+                    rod = new TurboShot();
+                    break;
+                case STORM_CHASER:
+                    rod = new StormChaser();
+                    break;
+                case FAR_FLYER:
+                    rod = new FarFlyer();
+                    break;
+                case LONG_SIGHT:
+                    rod = new LongSight();
+                    break;
+                case SNIPER:
+                    rod = new Sniper();
                     break;
                 default:
                     rod = null;
+                    break;
             }
 
             rods.add(rod);

@@ -15,38 +15,66 @@ public class Pool {
     private List<Fish> pool_3 = new ArrayList<>();
 
     public Pool(){
-        pool_1.add( getRandomFish() );
+        int numOfFish;
+        int numOfAlreadyFish;
+        Fish fish;
+        
+        numOfAlreadyFish = 0;
+        numOfFish = 1 + random.nextInt(3);
+        while(numOfAlreadyFish != numOfFish){
+            fish = getRandomFish();
 
-        pool_1.add( getRandomFish() );
-        pool_2.add( getRandomFish() );
+            if(pool_1.contains(fish)) continue;
 
-        pool_3.add( getRandomFish() );
-        pool_3.add( getRandomFish() );
-        pool_3.add( getRandomFish() );
+            pool_1.add(fish);
+            numOfAlreadyFish++;
+        }
+
+        numOfAlreadyFish = 0;
+        numOfFish = 1 + random.nextInt(3);
+        while(numOfAlreadyFish != numOfFish){
+            fish = getRandomFish();
+
+            if(pool_2.contains(fish)) continue;
+
+            pool_2.add(fish);
+            numOfAlreadyFish++;
+        }
+
+        numOfAlreadyFish = 0;
+        numOfFish = 1 + random.nextInt(3);
+        while(numOfAlreadyFish != numOfFish){
+            fish = getRandomFish();
+
+            if(pool_3.contains(fish)) continue;
+
+            pool_3.add(fish);
+            numOfAlreadyFish++;
+        }
     }
 
     public Fish getRandomFish(){
         Fish fish;
 
-        int pick = random.nextInt(6);
+        FishType pick = FishType.getRandomFishType();
 
         switch (pick) {
-            case 0:
+            case CARP:
                 fish = new Carp();
                 break;
-            case 1:
+            case COD:
                 fish = new Cod();
                 break;
-            case 2:
+            case MACKEREL:
                 fish = new Mackerel();
                 break;
-            case 3:
+            case PIKE:
                 fish = new Pike();
                 break;
-            case 4:
+            case SALMON:
                 fish = new Salmon();
                 break;
-            case 5:
+            case TUNA:
                 fish = new Tuna();
                 break;
             default:
@@ -77,5 +105,14 @@ public class Pool {
             System.out.println();
         }
         System.out.println();
+    }
+
+    public List<Fish> getPool(int poolNum){
+        switch( poolNum ){
+            case 1: return pool_1;
+            case 2: return pool_2;
+            case 3: return pool_3;
+            default: return null;
+        }
     }
 }

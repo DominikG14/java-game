@@ -7,6 +7,7 @@ public abstract class FishingRod {
     protected String FISHING_ROD_NAME = "FishingRod";
 
     protected int durability;
+    protected int maxDurability;
     protected int gold;
     protected int reelSpeed;
     protected int accuracy;
@@ -65,6 +66,24 @@ public abstract class FishingRod {
         System.out.println(Console.BRIGHT_BLUE + "Reel Speed: " + reelSpeed + Console.RESET);
         System.out.println(Console.BRIGHT_GREEN + "Accuracy:   " + accuracy + Console.RESET);
         System.out.println(Console.BRIGHT_YELLOW + "Range:      " + range + Console.RESET);
+    }
+
+    public void dispStats(boolean showMaxDurability){
+        System.out.println(Console.BRIGHT_RED + "Durability: " + durability + "/" + maxDurability + Console.RESET);
+        System.out.println(Console.BRIGHT_BLUE + "Reel Speed: " + reelSpeed + Console.RESET);
+        System.out.println(Console.BRIGHT_GREEN + "Accuracy:   " + accuracy + Console.RESET);
+        System.out.println(Console.BRIGHT_YELLOW + "Range:      " + range + Console.RESET);
+    }
+
+    public void dispShortenStats(){
+        System.out.print(Console.BOLD + Console.UNDERLINE);
+        dispName();
+        System.out.print(Console.RESET);
+
+        System.out.print(Console.RED + ": D" + durability + "/" + maxDurability + Console.RESET);
+        System.out.print(Console.BRIGHT_BLUE + "S: " + reelSpeed + Console.RESET + ", ");
+        System.out.print(Console.BRIGHT_GREEN + "A: " + accuracy + Console.RESET + ", ");
+        System.out.print(Console.BRIGHT_YELLOW + "R: " + range + Console.RESET);
     }
 
     public void dispShopInfo(){

@@ -2,20 +2,20 @@ package fishingrods;
 
 import java.util.Random;
 
-public class LightningRod extends FishingRod {
-    static int MIN_DURABILITY = 12;
-    static int MAX_DURABILITY = 18;
+public class Sniper extends FishingRod {
+    static int MIN_DURABILITY = 7;
+    static int MAX_DURABILITY = 8;
 
-    static int MIN_REELSPEED = 20;
-    static int MAX_REELSPEED = 25;
+    static int MIN_REELSPEED = 6;
+    static int MAX_REELSPEED = 7;
 
-    static int MIN_ACCURACY = 5;
-    static int MAX_ACCURACY = 6;
+    static int MIN_ACCURACY = 16;
+    static int MAX_ACCURACY = 18;
 
-    static int MIN_RANGE = 4;
-    static int MAX_RANGE = 5;
+    static int MIN_RANGE = 18;
+    static int MAX_RANGE = 20;
 
-    static int MIN_GOLD = 10;
+    static int MIN_GOLD = 14;
     static int MAX_GOLD = 15;
 
     public static void setDurabilityLimits(int min, int max){
@@ -43,8 +43,8 @@ public class LightningRod extends FishingRod {
         MAX_GOLD = max;
     }
 
-    public LightningRod() {
-        FISHING_ROD_NAME = "Lightning Rod";
+    public Sniper() {
+        FISHING_ROD_NAME = "Sniper";
 
         Random rand = new Random();
         durability = rand.nextInt((MAX_DURABILITY - MIN_DURABILITY) + 1) + MIN_DURABILITY;

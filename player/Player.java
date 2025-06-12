@@ -4,13 +4,18 @@ import fishingrods.*;
 import java.util.List;
 import java.util.ArrayList;
 import console.*;
+import fish.*;
 
 
 public class Player {
+    private static final int MAX_ROD_NUM = 3;
+
+    private int rent = 50;
     private int gold = 100;
-    private int day = 7;
+    private int day = 1;
     private int fishBait = 10;
     private List<FishingRod> rods = new ArrayList<FishingRod>();
+    private List<Fish> fishCaught = new ArrayList<Fish>();
 
     public int getGold() {
         return gold;
@@ -34,6 +39,10 @@ public class Player {
 
     public void setDay(int day) {
         this.day = day;
+    }
+
+    public List<FishingRod> getRods(){
+        return rods;
     }
 
     public FishingRod getRod(int rodNum) {
@@ -80,9 +89,31 @@ public class Player {
         return day % 7 == 0;
     }
 
+    public void addFish(Fish fish){
+        fishCaught.add(fish);
+    }
+
     public void dispStats(){
         dispGold();
         dispFishBait();
         dispDayNum();
+    }
+
+    public void removeRod(FishingRod rod){
+        rods.remove(rod);
+    }
+
+    public void removeWornOutRods(){
+        for (int i = rods.size() - 1; i >= 0; i--) {
+            if (rods.get(i).getDurability() == 0) {
+                rods.remove(i);
+            }
+        }
+    }
+
+    public boolean payRent(){
+        gold -= rent;
+        if(gold < 0) return false;
+        return true;
     }
 }
