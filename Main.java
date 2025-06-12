@@ -1,5 +1,7 @@
 import fishingrods.*;
 import shop.*;
+
+import java.util.Random;
 import java.util.Scanner;
 import player.*;
 import fish.*;
@@ -13,25 +15,24 @@ public class Main {
 
     public static void main(String[] args) {
         buyFirstRod();
-        goFishing();
 
-        // while( GAME_IS_RUNNING ){
-        //     // goFishing();
-        //     // goShopping();
+        while( GAME_IS_RUNNING ){
+            goFishing();
+            goShopping();
             
-        //     player.nextDay();
+            player.nextDay();
 
-        //     // if( player.isEndOfWeek() ){
-        //     //     payRent();
-        //     // }
+            if( player.isEndOfWeek() ){
+                if( !player.payRent() ){
+                    GAME_IS_RUNNING = false;
+                }
+            }
 
-        //     // increaseRodsStats();
-        //     // increaseFishStats();
-        // }
-    }
+            // increaseRodsStats();
+            // increaseFishStats();
+        }
 
-    private static void dispGold(){
-        System.out.println(Console.YELLOW + "Gold: " + player.getGold() + "$" + Console.RESET);
+        // endGameStats();
     }
 
     private static void buyFirstRod(){
@@ -74,8 +75,8 @@ public class Main {
         }
 
         FishingRod firstRod = shop.getRod(rodNum - 1);
-        player.addRod(firstRod);
-        player.pay(firstRod.getGold());
+        player.addRod( firstRod );
+        player.pay( firstRod.getGold() );
     }
 
     private static void goFishing(){
@@ -85,49 +86,93 @@ public class Main {
         boolean error = false;
         String err_msg = "";
 
-
-        while ( true ){
-            Console.clearScreen();
-
-            Console.textSeparator("STATS");
-            player.dispStats();
-
-            Console.textSeparator("FISHING ROD");
-            FishingRod rod = player.getRod(0);
-            rod.dispName();
-            rod.dispStats();
-
-            Console.textSeparator("POOLS");
+        for( FishingRod rod : player.getRods() ){
             Pool pool = new Pool();
-            pool.dispPools();
 
-            Console.textSeparator(Console.BRIGHT_RED + "CHOOSE YOUR ACTION" + Console.RESET, true, false);
-            if(error) {
-                System.out.println(Console.RED + err_msg + Console.RESET);
-                error = false;
+            while ( true ){
+                Console.clearScreen();
+
+                Console.textSeparator("STATS");
+                player.dispStats();
+
+                Console.textSeparator("FISHING ROD");
+                rod.dispName();
+                rod.dispStats(true);
+
+                Console.textSeparator("POOLS");
+                pool.dispPools();
+
+                Console.textSeparator(Console.BRIGHT_RED + "CHOOSE YOUR ACTION" + Console.RESET, true, false);
+                if(error) {
+                    System.out.println(Console.RED + err_msg + Console.RESET);
+                    error = false;
+                }
+                System.out.println(
+                    "Choose" + Console.CYAN + " pool " + Console.RESET + 
+                    "to fish in (" + Console.CYAN +  "1-3" + Console.RESET + ")."
+                );
+                System.out.print(
+                    "Or type '" + Console.RED + "0" + Console.RESET + 
+                    "' to" + Console.RED + " skip " + Console.RESET + 
+                    "fishing with current rod\n> "
+                );
+
+                if (userInput.hasNextInt()) {
+                    poolNum = userInput.nextInt();
+                    if(poolNum == 0) break;
+                    if (poolNum >= 1 && poolNum <= 3) break;
+                    error = true;
+                    err_msg = "Number out of range! Try again";
+                } else {
+                    error = true;
+                    err_msg = "Not a number! Try again";
+                    userInput.next();
+                }
             }
-            System.out.println(
-                "Choose" + Console.CYAN + " pool " + Console.RESET + 
-                "to fish in (" + Console.CYAN +  "1-3" + Console.RESET + ")."
-            );
-            System.out.print(
-                "Or type '" + Console.RED + "0" + Console.RESET + 
-                "' to" + Console.RED + " skip " + Console.RESET + 
-                "fishing with current rod\n> "
-            );
 
-            if (userInput.hasNextInt()) {
-                poolNum = userInput.nextInt();
-                if(poolNum == 0) break;
-                if (poolNum >= 1 && poolNum <= 3) break;
-                error = true;
-                err_msg = "Number out of range! Try again";
-            } else {
-                error = true;
-                err_msg = "Not a number! Try again";
-                userInput.next();
+            if( poolNum == 0 ) continue;
+
+            Random rand = new Random();
+            for( Fish fish : pool.getPool(poolNum) ){
+                int fishBait = player.getFishBait();
+                int rodDurability = rod.getDurability();
+
+                if( rodDurability == 0 || fishBait == 0 ) break;
+
+                int fishProbability = fish.getProbability();
+                fishProbability += rod.getReelSpeed() - fish.getReelSpeed();
+                fishProbability += rod.getAccuracy() - fish.getAccuracy();
+                fishProbability += rod.getRange() - fish.getRange();
+
+                int caughtProbability = 1 + rand.nextInt(100);
+
+                if(caughtProbability <= fishProbability){
+                    player.addFish(fish);
+                }
+
+                rodDurability -= fish.getNumber();
+                rod.setDurability(rodDurability);
+                if(rodDurability < 0){
+                    int excess = -rodDurability;
+                    fish.setNumber( fish.getNumber() - excess );
+                    rod.setDurability(0);
+                }
+
+                fishBait -= fish.getNumber();
+                player.setFishBait(fishBait);
+                if(fishBait < 0){
+                    int excess = -rodDurability;
+                    fish.setNumber( fish.getNumber() - excess );
+                    player.setFishBait(0);
+                }
             }
         }
-        
+
+        player.removeWornOutRods();
+    }
+
+    public static void goShopping(){
+        if(player.getRods().size() == 3) return;
+        buyFirstRod(); // TEST
     }
 }

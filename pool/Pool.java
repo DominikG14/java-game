@@ -15,14 +15,42 @@ public class Pool {
     private List<Fish> pool_3 = new ArrayList<>();
 
     public Pool(){
-        pool_1.add( getRandomFish() );
+        int numOfFish;
+        int numOfAlreadyFish;
+        Fish fish;
+        
+        numOfAlreadyFish = 0;
+        numOfFish = 1 + random.nextInt(3);
+        while(numOfAlreadyFish != numOfFish){
+            fish = getRandomFish();
 
-        pool_1.add( getRandomFish() );
-        pool_2.add( getRandomFish() );
+            if(pool_1.contains(fish)) continue;
 
-        pool_3.add( getRandomFish() );
-        pool_3.add( getRandomFish() );
-        pool_3.add( getRandomFish() );
+            pool_1.add(fish);
+            numOfAlreadyFish++;
+        }
+
+        numOfAlreadyFish = 0;
+        numOfFish = 1 + random.nextInt(3);
+        while(numOfAlreadyFish != numOfFish){
+            fish = getRandomFish();
+
+            if(pool_2.contains(fish)) continue;
+
+            pool_2.add(fish);
+            numOfAlreadyFish++;
+        }
+
+        numOfAlreadyFish = 0;
+        numOfFish = 1 + random.nextInt(3);
+        while(numOfAlreadyFish != numOfFish){
+            fish = getRandomFish();
+
+            if(pool_3.contains(fish)) continue;
+
+            pool_3.add(fish);
+            numOfAlreadyFish++;
+        }
     }
 
     public Fish getRandomFish(){
@@ -77,5 +105,14 @@ public class Pool {
             System.out.println();
         }
         System.out.println();
+    }
+
+    public List<Fish> getPool(int poolNum){
+        switch( poolNum ){
+            case 1: return pool_1;
+            case 2: return pool_2;
+            case 3: return pool_3;
+            default: return null;
+        }
     }
 }
