@@ -10,6 +10,7 @@ public abstract class Fish {
     protected int range;
     protected int number;
     protected int probability;
+    protected int gold;
 
     public int getReelSpeed() {
         return reelSpeed;
@@ -51,6 +52,10 @@ public abstract class Fish {
         this.number = number;
     }
 
+    public int getGold(){
+        return gold;
+    }
+
     public void dispFishInfo(){
         System.out.print(Console.BOLD + Console.UNDERLINE);
         dispName();
@@ -60,6 +65,22 @@ public abstract class Fish {
         System.out.print(Console.BRIGHT_BLUE + "S: " + reelSpeed + Console.RESET + ", ");
         System.out.print(Console.BRIGHT_GREEN + "A: " + accuracy + Console.RESET + ", ");
         System.out.print(Console.BRIGHT_YELLOW + "R: " + range + Console.RESET);
+    }
+
+    public void dispSellInfo(){
+        System.out.print(Console.BOLD + Console.UNDERLINE);
+        dispName();
+        System.out.print(Console.RESET);
+
+        System.out.println(": " + Console.YELLOW + "G: " + gold + "$" + Console.RESET);
+    }
+
+    public void dispCaughtInfo(){
+        System.out.print(Console.BOLD + Console.UNDERLINE);
+        dispName();
+        System.out.print(Console.RESET);
+
+        System.out.println(" x " + number);
     }
 
     @Override

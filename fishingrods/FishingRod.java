@@ -57,6 +57,10 @@ public abstract class FishingRod {
         System.out.println(FISHING_ROD_NAME);
     }
 
+    public void dispName(boolean newLine){
+        System.out.print(FISHING_ROD_NAME);
+    }
+
     public void dispGold() {
         System.out.println(Console.YELLOW + "Cost: " + gold + "$" + Console.RESET);
     }
@@ -77,13 +81,25 @@ public abstract class FishingRod {
 
     public void dispShortenStats(){
         System.out.print(Console.BOLD + Console.UNDERLINE);
-        dispName();
+        dispName(false);
         System.out.print(Console.RESET);
 
-        System.out.print(Console.RED + ": D" + durability + "/" + maxDurability + Console.RESET);
+        System.out.print(": " + Console.RED + "D: " + durability + "/" + maxDurability + Console.RESET + ", ");
         System.out.print(Console.BRIGHT_BLUE + "S: " + reelSpeed + Console.RESET + ", ");
         System.out.print(Console.BRIGHT_GREEN + "A: " + accuracy + Console.RESET + ", ");
-        System.out.print(Console.BRIGHT_YELLOW + "R: " + range + Console.RESET);
+        System.out.println(Console.BRIGHT_YELLOW + "R: " + range + Console.RESET);
+    }
+
+    public void dispShortShopInfo(){
+        System.out.print(Console.BOLD + Console.UNDERLINE);
+        dispName(false);
+        System.out.print(Console.RESET);
+
+        System.out.print(": " + Console.YELLOW + "G: " + gold + "$" + Console.RESET + ", ");
+        System.out.print(Console.RED + "D: " + durability  + Console.RESET + ", ");
+        System.out.print(Console.BRIGHT_BLUE + "S: " + reelSpeed + Console.RESET + ", ");
+        System.out.print(Console.BRIGHT_GREEN + "A: " + accuracy + Console.RESET + ", ");
+        System.out.println(Console.BRIGHT_YELLOW + "R: " + range + Console.RESET);
     }
 
     public void dispShopInfo(){
