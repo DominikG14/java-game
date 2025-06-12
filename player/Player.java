@@ -90,7 +90,7 @@ public class Player {
     }
 
     public boolean isEndOfWeek(){
-        return day % 7 == 0;
+        return day % 7 == 1;
     }
 
     public void addFish(Fish fish){

@@ -28,9 +28,6 @@ public class Main {
                     GAME_IS_RUNNING = false;
                 }
             }
-
-            // increaseRodsStats();
-            // increaseFishStats();
         }
 
         // endGameStats();
@@ -264,11 +261,11 @@ public class Main {
 
                 case BUY_FISH_BAIT:
                     if( player.getGold() >= shop.getFishBaitPrice() ){
-                            player.pay( shop.getFishBaitPrice() );
-                            int newFishBaitAmmount = player.getFishBait() + shop.getFishBaitNum();
-                            player.setFishBait( newFishBaitAmmount );
-                            shop.sellOption( optionNum );
-                            shopActions++;
+                        player.pay( shop.getFishBaitPrice() );
+                        int newFishBaitAmmount = player.getFishBait() + shop.getFishBaitNum();
+                        player.setFishBait( newFishBaitAmmount );
+                        shop.sellOption( optionNum );
+                        shopActions++;
                     } else {
                         error = true;
                         err_msg = "Not enough gold to buy Fishing Bait!";
