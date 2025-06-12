@@ -39,6 +39,18 @@ public abstract class Fish {
         System.out.print(FISH_NAME);
     }
 
+    public int getProbability(){
+        return probability;
+    }
+
+    public int getNumber(){
+        return number;
+    }
+
+    public void setNumber(int number){
+        this.number = number;
+    }
+
     public void dispFishInfo(){
         System.out.print(Console.BOLD + Console.UNDERLINE);
         dispName();
@@ -48,5 +60,14 @@ public abstract class Fish {
         System.out.print(Console.BRIGHT_BLUE + "S: " + reelSpeed + Console.RESET + ", ");
         System.out.print(Console.BRIGHT_GREEN + "A: " + accuracy + Console.RESET + ", ");
         System.out.print(Console.BRIGHT_YELLOW + "R: " + range + Console.RESET);
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof Fish)) return false;
+
+        Fish otherFish = (Fish) object;
+        return FISH_NAME == otherFish.FISH_NAME;
     }
 }

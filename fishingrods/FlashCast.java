@@ -54,5 +54,7 @@ public class FlashCast extends FishingRod {
         reelSpeed = rand.nextInt((MAX_REELSPEED - MIN_REELSPEED) + 1) + MIN_REELSPEED;
         accuracy = rand.nextInt((MAX_ACCURACY - MIN_ACCURACY) + 1) + MIN_ACCURACY;
         range = rand.nextInt((MAX_RANGE - MIN_RANGE) + 1) + MIN_RANGE;
+
+        maxDurability = durability;
     }
 }
